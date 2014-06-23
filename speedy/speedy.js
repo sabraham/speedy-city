@@ -127,15 +127,15 @@ d3.json("speedy/boroughs.geojson", function(error, nyc) {
 var drawTitle = function () {
     svg.append("text")
         .attr("x", 46)
-        .attr("y", 64)
-        .text("NYC Traffic")
+        .attr("y", 62)
+        .text("Live NYC Traffic")
         .attr("font-family", "Helvetica Neue")
-        .attr("font-size", "50px")
+        .attr("font-size", "42px")
         .attr("fill", "#262626")
 
     svg.append("text")
         .attr("x", 50)
-        .attr("y", 84)
+        .attr("y", 80)
         .attr("font-family", "Helvetica Neue")
         .attr("font-size", "10px")
         .attr("fill", "#262626")
@@ -250,7 +250,7 @@ var drawRoute = function (row) {
 var refillQueue = function (callback) {
     d3.text("speedy/asof.txt", function (txt) {
         d3.select("#asof")
-            .text("updated on " + txt);
+            .text("last updated on " + txt);
     })
     d3.csv("speedy/speeds.csv", function(csv) {
         shuffle(csv);
