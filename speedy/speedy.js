@@ -129,14 +129,14 @@ var drawTitle = function () {
         .attr("x", 46)
         .attr("y", 62)
         .text("Live NYC Traffic")
-        .attr("font-family", "Helvetica Neue")
+        .attr("font-family", '"Myriad Pro", "Helvetica Neue", Helvetica, Arial')
         .attr("font-size", "42px")
         .attr("fill", "#262626")
 
     svg.append("text")
         .attr("x", 50)
         .attr("y", 80)
-        .attr("font-family", "Helvetica Neue")
+        .attr("font-family", '"Myriad Pro", "Helvetica Neue", Helvetica, Arial')
         .attr("font-size", "10px")
         .attr("fill", "#262626")
         .attr("id", "asof");
@@ -147,9 +147,9 @@ var drawLegendRects = function () {
     var initial_x = 50;
     var initial_y = 110;
 
-    var rect_width = 80;
+    var rect_width = 150;
     var rect_height = 30;
-    var buffer = 10;
+    var buffer = 5;
 
     var speeds = [5, 10, 20, 40, 80];
     for (var i = 0; i < 5; ++i) {
@@ -163,11 +163,12 @@ var drawLegendRects = function () {
             .attr("fill", "#262626");
 
         svg.append("text")
-            .attr("x", x + rect_width + buffer)
+            .attr("x", x + rect_width - buffer)
             .attr("y", y + rect_height / 2)
-            .attr("font-family", "Helvetica Neue")
+            .attr("font-family", '"Myriad Pro", "Helvetica Neue", Helvetica, Arial')
             .attr("font-size", "20px")
-            .attr("fill", "#262626")
+            .attr("fill", "white")
+            .attr("text-anchor", "end")
             .attr("dominant-baseline", "central")
             .text(speeds[i] + " MPH");
 
