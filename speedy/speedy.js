@@ -17,9 +17,7 @@ function Queue () {
             }
             return ret;
         } else {
-            this.front = this.back.reverse();
-            this.back = [];
-            return this.front.pop();
+            return undefined;
         }
     }
 }
