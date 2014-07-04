@@ -22,29 +22,6 @@ function Queue () {
     }
 }
 
-function Set (max_size) {
-    this.obj = {};
-    this.size = 0;
-    this.max_size = max_size;
-    this.add = function (x) {
-        while (this.size >= this.max_size) {
-            var keys = Object.keys(this.obj);
-            var key = keys[Math.floor(Math.random() * keys.length)];
-            this.del(key);
-        }
-        this.obj[x] = true;
-        this.size++;
-    }
-    this.del = function (x) {
-        d3.select(this.obj[x]).remove();
-        delete this.obj[x];
-        this.size--;
-    }
-    this.has = function (x) {
-        return this.obj[x];
-    }
-}
-
 var jitter = function () {
     return (Math.random() - 0.5) * 1;
 }
@@ -59,22 +36,19 @@ var shuffle = function (arr) {
     return arr;
 }
 
-// nice hack https://gist.github.com/mbostock/5649592
+// nice hack http://fromthepantothefire.com/2014/02/26/animate-a-line-draw-in-d3-using-transitions-on-stroke-dash-properties/
 var lineTransition = function (speed, path) {
     path.transition()
         .duration(100000 / speed)
-        .attrTween("stroke-dasharray", function () {return tweenDash(this.getTotalLength(), speed);})
+        .attr("stroke-dashoffset", 0)
         .each("end", function(d,i) {
             d3.select(this).remove();
         });
 };
 
-var tweenDash = function (path_len, speed) {
-    var car_len =  Math.pow(1.5, speed / 15.0) + 1;
-    var interpolate = d3.interpolateString([0, 0                 , car_len, path_len - car_len].join(','),
-                                           [0, path_len - car_len, car_len, 0                 ].join(','));
-    return function(t) { return interpolate(t); };
-};
+var carLen = function(speed) {
+    return  Math.pow(1.5, speed / 15.0) + 1;
+}
 
 var width = 800;
 var height = 800
@@ -172,7 +146,6 @@ var drawLegendRects = function () {
 
         drawLegendPeriodically(x, y, rect_width, rect_height, speeds[i], 1000);
     }
-
 };
 
 var drawLegend = function (x, y, width, speed) {
@@ -185,9 +158,10 @@ var drawLegend = function (x, y, width, speed) {
         .attr("class", "legend")
         .attr("speed", speed)
         .attr("d", lineLinearFunction(points))
+        .attr("stroke-dasharray", function (d) {return carLen(speed) + "," + this.getTotalLength();})
+        .attr("stroke-dashoffset", function (d) {return this.getTotalLength();})
         .attr("stroke", function(d) {return randomColor(color_brewer);})
         .call(function (path) {return lineTransition(parseFloat(speed), path);})
-
 };
 
 var drawLegendPeriodically = function (x, y, width, height, speed, timeout) {
@@ -242,6 +216,8 @@ var drawRoute = function (row) {
         .attr("class", "route")
         .attr("speed", speed)
         .attr("d", lineFunction(bezier))
+        .attr("stroke-dasharray", function (d) {return carLen(speed) + "," + this.getTotalLength();})
+        .attr("stroke-dashoffset", function (d) {return this.getTotalLength();})
         .attr("stroke", function(d) {return randomColor(color_brewer);})
         .call(function (path) {return lineTransition(parseFloat(speed), path);})
 };
